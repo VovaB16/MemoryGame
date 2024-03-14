@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Memory Game</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(60deg, #3731aa, #38a2ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .memory-game {
+            background-color: white;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
+            border-radius: 16px;
+            padding: 10px;
+            width: 500px;
+            height: 500px;
+            margin: auto;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .memory-card {
+            width: calc(25% - 10px);
+            height: calc(33.333% - 55px);
+            margin: 5px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform .4s;
+        }
+
+        .memory-card:active {
+            transition: transform .2s;
+        }
+
+        .memory-card.flip {
+            transform: rotateY(180deg);
+        }
+
+        .front-face,
+        .back-face {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            position: absolute;
+            border-radius: 5px;
+            background: #1c7dcd;
+            backface-visibility: hidden;
+
+        }
+
+        .front-face {
+            transform: rotateY(180deg);
+        }
+
+        #timer,#Attempts{
+            color: rgb(0, 0, 0);
+        }
+        h1 {
+            font-size: 32px;
+            color:white;
+            text-transform: uppercase;
+            margin-left: 16px;
+        }
+
+        label {
+
+            color: white;
+            text-transform: uppercase;
+        }
+
+        #start-page,
+        #end-page {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        p {
+            color: white;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 14px;
+            border: none;
+            box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        button:hover {
+            background-color: rgb(202, 202, 202);
+        }
+
+        #level {
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #d0cece;
+        }
+
+        table {
+            width: 100%;
+            margin-bottom: 20px;
+            border-collapse: collapse;
+        }
+
+        #Top-Result {
+            display: flex;
+            align-items: start;
+            justify-content: left;
+            height: 80%;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            border: 1px solid #000000;
+            background-color: #f1efef;
+        }
+
+        th {
+            background-color: #f1efef;
+        }
+
+        .stats{
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
+            display: flex;
+            background-color: white;
+            padding-left: 10px;
+            margin-bottom: 16px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="start-page">
+        <h1>Memory Game</h1>
+        <label for="level">Choose a level :</label>
+        <input list="levels" id="level" name="level">
+        <button id="start-button">Start</button>
+        <button id="Result-button">Result</button>
+
+        <datalist id="levels">
+            <option value="Easy">
+            <option value="Medium">
+            <option value="Hard">
+        </datalist>
+    </div>
+    <div id="end-page" style="display: none;">
+        <p id="end-time"></p>
+        <button id="retry-button">Ще раз!</button>
+    </div>
+
+    <div id="Top-Result" style="display: none;">
+        <h1>Memory Game Results</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Username</th>
+                    <th>Time (seconds)</th>
+                    <th>Attempts</th>
+                </tr>
+            </thead>
+            <tbody id="resultsTableBody"></tbody>
+        </table>
+        <button id="Back-button">Go Back</button>
+    </div>
+    <div id="game-page" style="display: none;">
+        <div class="stats">
+            <h1 id="timer">Time: 0s</h1>
+            <h1 id="Attempts">Attempts : 0/0</h1>
+        </div>
+        <section class="memory-game">
+            <div class="memory-card" data-framework="bell">
+                <img class="front-face" src="img/bell.png" alt="bell" />
+                <img class="back-face" src="img/question.png" alt="Backround" />
+            </div>
+
+            <div class="memory-card" data-framework="bell">
+                <img class="front-face" src="img/bell.png" alt="bell" />
+                <img class="back-face" src="img/question.png" alt="Backround" />
+            </div>
+
+            <div class="memory-card" data-framework="bettel">
+                <img class="front-face" src="img/bettel.png" alt="bettel" />
+                <img class="back-face" src="img/question.png" alt="Backround" />
+            </div>
+
+            <div class="memory-card" data-framework="bettel">
+                <img class="front-face" src="img/bettel.png" alt="bettel" />
+                <img class="back-face" src="img/question.png" alt="Backround" />
+            </div>
+
+            <div class="memory-card" data-framework="bow">
+                <img class="front-face" src="img/bow-and-arrow.png" alt="bow" />
+                <img class="back-face" src="img/question.png" alt="Backround" />
+            </div>
+
+            <div class="memory-card" data-framework="bow">
+                <img class="front-face" src="img/bow-and-arrow.png" alt="bow" />
+                <img class="back-face" src="img/question.png" alt="Backround" />
+            </div>
+
+            <div class="memory-card" data-framework="dics">
+                <img class="front-face" src="img/disc.png" alt="dick" />
+                <img class="back-face" src="img/question.png" alt="Backround" />
+            </div>
+
+            <div class="memory-card" data-framework="dics">
+                <img class="front-face" src="img/disc.png" alt="dick" />
+                <img class="back-face" src="img/question.png" alt="Backround" />
+            </div>
+
+            <div class="memory-card" data-framework="medkit">
+                <img class="front-face" src="img/medkit.png" alt="medkit" />
+                <img class="back-face" src="img/question.png" alt="Backround" />
+            </div>
+
+            <div class="memory-card" data-framework="medkit">
+                <img class="front-face" src="img/medkit.png" alt="medkit" />
+                <img class="back-face" src="img/question.png" alt="Backround" />
+            </div>
+
+            <div class="memory-card" data-framework="repair">
+                <img class="front-face" src="img/repair.png" alt="repair" />
+                <img class="back-face" src="img/question.png" alt="Backround" />
+            </div>
+
+            <div class="memory-card" data-framework="repair">
+                <img class="front-face" src="img/repair.png" alt="repair" />
+                <img class="back-face" src="img/question.png" alt="Backround" />
+            </div>
+
+            <div class="memory-card" data-framework="screen">
+                <img class="front-face" src="img/screen.png" alt="screen" />
+                <img class="back-face" src="img/question.png" alt="Backround" />
+            </div>
+
+            <div class="memory-card" data-framework="screen">
+                <img class="front-face" src="img/screen.png" alt="screen" />
+                <img class="back-face" src="img/question.png" alt="Backround" />
+            </div>
+
+            <div class="memory-card" data-framework="smile">
+                <img class="front-face" src="img/smiling-face.png" alt="Smile" />
+                <img class="back-face" src="img/question.png" alt="Backround" />
+            </div>
+            <div class="memory-card" data-framework="smile">
+                <img class="front-face" src="img/smiling-face.png" alt="Smile" />
+                <img class="back-face" src="img/question.png" alt="Backround" />
+            </div>
+        </section>
+    </div>
+    <script src="main.js"></script>
+</body>
+
+</html>
